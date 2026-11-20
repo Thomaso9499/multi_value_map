@@ -27,3 +27,10 @@ The class subclasses `dict` so the keys are directly iterable and `len`/`in` wor
 - `add` allows duplicate values: this is a list, not a set. Ordering and repetition are preserved.
 - `remove` raises `KeyError` for a missing key (following Python's `dict`/`list` convention) and `ValueError` if the key exists but the value is not present (following `list.remove`). When the last value is removed, the key is deleted automatically.
 - `get_one` returns `None` for both missing keys and keys whose value list is empty (which should not happen via the supported API, but can if the internal list is mutated directly).
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
